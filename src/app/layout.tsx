@@ -35,7 +35,7 @@ export const metadata: Metadata = {
       "Trade on cextradevip: the leading online trading platform with the best spreads on gold and oil. Online trading is risky. T&Cs apply.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
     apple: "/apple-touch-icon.png",
   },
 };
