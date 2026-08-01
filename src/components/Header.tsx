@@ -37,7 +37,7 @@ function NavDropdown({
     return (
       <Link
         href={item.href || "#"}
-        className="flex items-center gap-1 text-sm lg:text-[15px] font-normal transition-colors duration-200 hover:opacity-70 whitespace-nowrap"
+        className="flex items-center gap-1 px-3 py-2 text-sm lg:text-[15px] font-normal transition-colors duration-200 hover:opacity-70 whitespace-nowrap rounded-lg hover:bg-gray-50"
         onClick={onClose}
       >
         {item.label}
@@ -49,7 +49,7 @@ function NavDropdown({
     <div ref={ref} className="relative group">
       <button
         onClick={onToggle}
-        className="flex items-center gap-1 text-sm lg:text-[15px] font-normal transition-colors duration-200 hover:opacity-70 whitespace-nowrap"
+        className="flex items-center gap-1 px-3 py-2 text-sm lg:text-[15px] font-normal transition-colors duration-200 hover:opacity-70 whitespace-nowrap rounded-lg hover:bg-gray-50"
         aria-expanded={isActive}
       >
         {item.label}
@@ -243,7 +243,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1.5 ml-12">
+          <nav className="hidden lg:flex items-center gap-3 ml-12">
             {navigationData.map((item, index) => (
               <NavDropdown
                 key={index}
