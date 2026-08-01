@@ -60,7 +60,7 @@ function TradingViewWidget({ symbol }: { symbol: string }) {
   }, [symbol]);
 
   return (
-    <div ref={containerRef} style={{ width: "100%", height: "100%", minHeight: 500, borderRadius: 12, overflow: "hidden" }} />
+    <div ref={containerRef} style={{ width: "100%", height: 500, overflow: "hidden" }} />
   );
 }
 
@@ -116,7 +116,7 @@ export default function MarketPage() {
         </div>
 
         {/* Chart */}
-        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 16 }}>
+        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 16, overflow: "hidden" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: "#ffffff", margin: 0 }}>{selected.pair}</h2>
@@ -141,7 +141,9 @@ export default function MarketPage() {
               Trade
             </button>
           </div>
-          <TradingViewWidget symbol={selected.pair} />
+          <div style={{ overflow: "hidden", borderRadius: 12 }}>
+            <TradingViewWidget symbol={selected.pair} />
+          </div>
         </div>
       </div>
     </div>
