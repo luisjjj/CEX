@@ -37,14 +37,14 @@ export default function TradePage() {
   };
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto" }}>
+    <div style={{ maxWidth: 800, margin: "0 auto", overflowX: "hidden", width: "100%" }}>
       <style>{`
         .trade-leverage-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
         @media (max-width: 480px) {
           .trade-leverage-grid { grid-template-columns: repeat(3, 1fr); }
         }
       `}</style>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, overflowX: "hidden", width: "100%" }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: "#ffffff", margin: 0 }}>Trade</h1>
 
         {/* Pair selector */}

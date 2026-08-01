@@ -102,7 +102,7 @@ export default function WalletPage() {
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <div style={{ maxWidth: 1000, margin: "0 auto", overflowX: "hidden", width: "100%" }}>
       <style>{`
         .wallet-balance-card { display: flex; align-items: center; justify-content: space-between; }
         .wallet-balance-buttons { display: flex; gap: 12px; margin-top: 16px; }

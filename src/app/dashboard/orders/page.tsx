@@ -24,7 +24,7 @@ export default function OrdersPage() {
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <div style={{ maxWidth: 1000, margin: "0 auto", overflowX: "hidden", width: "100%" }}>
       <style>{`
         .orders-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
         .orders-filters button { flex-shrink: 0; }
@@ -68,7 +68,7 @@ export default function OrdersPage() {
           }
         }
       `}</style>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, overflowX: "hidden", width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "#ffffff", margin: 0 }}>Orders</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#d1d5dc" }}>

@@ -39,7 +39,7 @@ export default function DashboardHome() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", overflowX: "hidden", width: "100%" }}>
       <style>{`
         .home-balance-card { display: flex; align-items: center; justify-content: space-between; }
         .home-tabs { display: flex; gap: 4px; background-color: #111620; border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; overflow-x: auto; }
@@ -59,7 +59,7 @@ export default function DashboardHome() {
           .home-tabs button { flex: 1; min-width: 0; padding: 8px 12px; font-size: 13px; }
         }
       `}</style>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, overflowX: "hidden", width: "100%" }}>
         {/* Balance card */}
         <div style={{ backgroundColor: "#111620", borderRadius: 16, padding: 20, border: "1px solid rgba(255,255,255,0.05)" }}>
           <div className="home-balance-card">
