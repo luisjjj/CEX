@@ -232,7 +232,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-12">
-        <div className="flex items-center justify-between h-[88px] lg:h-[100px]">
+        <div className="relative flex items-center justify-between h-[88px] lg:h-[100px]">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
             <img
@@ -242,8 +242,8 @@ export default function Header() {
             />
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-3 ml-12">
+          {/* Desktop Nav - centered */}
+          <nav className="hidden lg:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
             {navigationData.map((item, index) => (
               <NavDropdown
                 key={index}
