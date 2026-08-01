@@ -1,0 +1,47 @@
+create table public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  username text unique,
+  withdraw_pin text,
+  created_at timestamptz default now() not null,
+  updated_at timestamptz default now() not null
+);
+
+alter table public.profiles enable row level security;
+
+create policy "Users can view own profile"
+  on public.profiles for select
+  to authenticated
+  using ( (select auth.uid()) = id );
+
+create policy "Users can insert own profile"
+  on public.profiles for insert
+  to authenticated
+  with check ( (select auth.uid()) = id );
+
+create policy "Users can update own profile"
+  on public.profiles for update
+  to authenticated
+  using ( (select auth.uid()) = id )
+  with check ( (select auth.uid()) = id );
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, full_name, username)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'full_name', ''),
+    coalesce(new.raw_user_meta_data ->> 'username', '')
+  );
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row
+  execute function public.handle_new_user();
