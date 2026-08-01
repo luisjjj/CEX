@@ -103,7 +103,33 @@ export default function WalletPage() {
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <style>{`
+        .wallet-balance-card { display: flex; align-items: center; justify-content: space-between; }
+        .wallet-balance-buttons { display: flex; gap: 12px; margin-top: 16px; }
+        .wallet-asset-header { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: #d1d5dc; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+        .wallet-asset-header .val-col { display: none; }
+        .wallet-asset-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; }
+        .wallet-asset-row .val-col { display: none; }
+        .wallet-withdraw-assets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+        @media (min-width: 640px) {
+          .wallet-asset-header { grid-template-columns: 1fr auto auto; gap: 16px; padding: 12px 24px; }
+          .wallet-asset-header .val-col { display: block; }
+          .wallet-asset-row { grid-template-columns: 1fr auto auto; gap: 16px; padding: 16px 24px; }
+          .wallet-asset-row .val-col { display: block; }
+        }
+        @media (max-width: 639px) {
+          .wallet-balance-card { flex-direction: column; align-items: stretch; gap: 12px; }
+          .wallet-balance-buttons { flex-direction: column; }
+          .wallet-balance-buttons button { width: 100%; justify-content: center; }
+        }
+        @media (min-width: 480px) {
+          .wallet-withdraw-assets { grid-template-columns: repeat(5, 1fr); }
+        }
+        @media (max-width: 420px) {
+          .wallet-deposit-methods { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "#ffffff", margin: 0 }}>Wallet</h1>
           <button onClick={() => setShowBalances(!showBalances)} style={{ color: "#d1d5dc", background: "none", border: "none", cursor: "pointer" }}>
@@ -112,32 +138,36 @@ export default function WalletPage() {
         </div>
 
         {/* Total balance */}
-        <div style={{ backgroundColor: "#111620", borderRadius: 16, padding: 24, border: "1px solid rgba(255,255,255,0.05)" }}>
-          <p style={{ fontSize: 14, color: "#d1d5dc", margin: "0 0 4px 0" }}>Total Balance</p>
-          <h2 style={{ fontSize: 30, fontWeight: 700, color: "#ffffff", margin: 0 }}>
-            {showBalances ? "$0.00" : "****"}
-          </h2>
-          <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-            <button onClick={() => setDepositOpen(true)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", backgroundColor: GOLD, color: "#000000", fontWeight: 600, borderRadius: 8, fontSize: 14, border: "none", cursor: "pointer" }}>
-              <ArrowDownLeft size={16} /> Deposit
-            </button>
-            <button onClick={() => setWithdrawOpen(true)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", backgroundColor: "rgba(255,255,255,0.05)", color: "#ffffff", fontWeight: 500, borderRadius: 8, fontSize: 14, border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer" }}>
-              <ArrowUpRight size={16} /> Withdraw
-            </button>
+        <div style={{ backgroundColor: "#111620", borderRadius: 16, padding: 20, border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="wallet-balance-card">
+            <div>
+              <p style={{ fontSize: 13, color: "#d1d5dc", margin: "0 0 4px 0" }}>Total Balance</p>
+              <h2 style={{ fontSize: 26, fontWeight: 700, color: "#ffffff", margin: 0 }}>
+                {showBalances ? "$0.00" : "****"}
+              </h2>
+            </div>
+            <div className="wallet-balance-buttons">
+              <button onClick={() => setDepositOpen(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "10px 20px", backgroundColor: GOLD, color: "#000000", fontWeight: 600, borderRadius: 8, fontSize: 14, border: "none", cursor: "pointer" }}>
+                <ArrowDownLeft size={16} /> Deposit
+              </button>
+              <button onClick={() => setWithdrawOpen(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "10px 20px", backgroundColor: "rgba(255,255,255,0.05)", color: "#ffffff", fontWeight: 500, borderRadius: 8, fontSize: 14, border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer" }}>
+                <ArrowUpRight size={16} /> Withdraw
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Assets list */}
         <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", overflow: "hidden" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, padding: "12px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 12, color: "#d1d5dc", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
+          <div className="wallet-asset-header">
             <span>Asset</span>
             <span style={{ textAlign: "right" }}>Balance</span>
-            <span style={{ textAlign: "right" }}>Value</span>
+            <span className="val-col" style={{ textAlign: "right" }}>Value</span>
           </div>
           {ASSETS.map((asset) => (
-            <div key={asset.symbol} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", backgroundColor: asset.color + "30", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#ffffff" }}>
+            <div key={asset.symbol} className="wallet-asset-row">
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", backgroundColor: asset.color + "30", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#ffffff", flexShrink: 0 }}>
                   {asset.symbol.slice(0, 2)}
                 </div>
                 <div>
@@ -145,10 +175,10 @@ export default function WalletPage() {
                   <p style={{ color: "#9ca3af", fontSize: 12, margin: 0 }}>{asset.name}</p>
                 </div>
               </div>
-              <span style={{ color: "#ffffff", fontSize: 14, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ color: "#ffffff", fontSize: 14, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
                 {showBalances ? asset.balance.toFixed(4) : "****"}
               </span>
-              <span style={{ color: "#ffffff", fontSize: 14, fontVariantNumeric: "tabular-nums" }}>
+              <span className="val-col" style={{ color: "#ffffff", fontSize: 14, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
                 {showBalances ? `$${asset.usdValue.toFixed(2)}` : "****"}
               </span>
             </div>
@@ -160,8 +190,8 @@ export default function WalletPage() {
       {depositOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.7)" }} onClick={closeDeposit} />
-          <div style={{ position: "relative", backgroundColor: "#1a1f2e", borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)", width: "100%", maxWidth: 420, padding: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+          <div style={{ position: "relative", backgroundColor: "#1a1f2e", borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)", width: "100%", maxWidth: 420, padding: 20, maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: "#ffffff", margin: 0 }}>
                 {depositStep === "success" ? "Deposit Submitted" : "Deposit"}
               </h2>
@@ -171,7 +201,7 @@ export default function WalletPage() {
             {depositStep === "form" && (
               <>
                 <label style={labelStyle}>Payment Method</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
+                <div className="wallet-deposit-methods" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 }}>
                   {DEPOSIT_METHODS.map((m) => {
                     const Icon = m.icon;
                     return (
@@ -186,11 +216,11 @@ export default function WalletPage() {
                   <input type="number" value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)} placeholder={`Min. ${depositMethod.min}`} style={{ ...inputStyle, paddingRight: 60, fontSize: 18 }} />
                   <span style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", fontSize: 14 }}>USD</span>
                 </div>
-                <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 20px 0" }}>Minimum deposit: ${depositMethod.min}</p>
+                <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 16px 0" }}>Minimum deposit: ${depositMethod.min}</p>
                 <label style={labelStyle}>Deposit Address</label>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
-                  <div style={{ flex: 1, backgroundColor: "#0f1318", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#d1d5dc", fontFamily: "monospace", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{MOCK_ADDRESS}</div>
-                  <button onClick={handleCopy} style={{ padding: 12, backgroundColor: "rgba(255,255,255,0.05)", borderRadius: 8, color: "#d1d5dc", border: "none", cursor: "pointer" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+                  <div style={{ flex: 1, backgroundColor: "#0f1318", borderRadius: 8, padding: "12px 16px", fontSize: 13, color: "#d1d5dc", fontFamily: "monospace", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{MOCK_ADDRESS}</div>
+                  <button onClick={handleCopy} style={{ padding: 12, backgroundColor: "rgba(255,255,255,0.05)", borderRadius: 8, color: "#d1d5dc", border: "none", cursor: "pointer", flexShrink: 0 }}>
                     {copied ? <CheckCircle size={16} style={{ color: "#34d399" }} /> : <Copy size={16} />}
                   </button>
                 </div>
@@ -200,7 +230,7 @@ export default function WalletPage() {
 
             {depositStep === "confirm" && (
               <>
-                <div style={{ backgroundColor: "#0f1318", borderRadius: 12, padding: 16, display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                <div style={{ backgroundColor: "#0f1318", borderRadius: 12, padding: 16, display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
                   {([["Method", depositMethod.label], ["Amount", `$${depositAmount}`], ["Address", MOCK_ADDRESS.slice(0, 12) + "..."], ["Network", depositMethod.label]] as [string, string][]).map(([k, v]) => (
                     <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: 14 }}>
                       <span style={{ color: "#d1d5dc" }}>{k}</span>
@@ -208,7 +238,7 @@ export default function WalletPage() {
                     </div>
                   ))}
                 </div>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12, color: "#9ca3af", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12, color: "#9ca3af", marginBottom: 16 }}>
                   <Clock size={14} style={{ marginTop: 2, flexShrink: 0 }} />
                   <p style={{ margin: 0 }}>Deposits typically confirm within 1-3 network confirmations. Processing may take 5-30 minutes.</p>
                 </div>
@@ -243,8 +273,8 @@ export default function WalletPage() {
       {withdrawOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.7)" }} onClick={closeWithdraw} />
-          <div style={{ position: "relative", backgroundColor: "#1a1f2e", borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)", width: "100%", maxWidth: 420, padding: 24, maxHeight: "90vh", overflowY: "auto" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+          <div style={{ position: "relative", backgroundColor: "#1a1f2e", borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)", width: "100%", maxWidth: 420, padding: 20, maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: "#ffffff", margin: 0 }}>
                 {withdrawStep === "success" ? "Withdrawal Submitted" : "Withdraw"}
               </h2>
@@ -254,7 +284,7 @@ export default function WalletPage() {
             {withdrawStep === "form" && (
               <>
                 <label style={labelStyle}>Select Asset</label>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8, marginBottom: 20 }}>
+                <div className="wallet-withdraw-assets">
                   {ASSETS.map((a) => (
                     <button key={a.symbol} onClick={() => setWithdrawAsset(a)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "10px 8px", borderRadius: 12, fontSize: 12, fontWeight: 500, color: withdrawAsset.symbol === a.symbol ? GOLD : "#d1d5dc", backgroundColor: withdrawAsset.symbol === a.symbol ? "rgba(255,222,2,0.1)" : "rgba(255,255,255,0.05)", border: withdrawAsset.symbol === a.symbol ? "1px solid rgba(255,222,2,0.3)" : "1px solid rgba(255,255,255,0.1)", cursor: "pointer" }}>
                       <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: a.color + "30", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#ffffff" }}>{a.symbol.slice(0, 2)}</div>
@@ -267,11 +297,11 @@ export default function WalletPage() {
                   <input type="number" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} placeholder="0.00" style={{ ...inputStyle, paddingRight: 80, fontSize: 18 }} />
                   <span style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", fontSize: 14 }}>{withdrawAsset.symbol}</span>
                 </div>
-                <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 20px 0" }}>Available: {withdrawAsset.balance.toFixed(4)} {withdrawAsset.symbol}</p>
+                <p style={{ fontSize: 12, color: "#9ca3af", margin: "0 0 16px 0" }}>Available: {withdrawAsset.balance.toFixed(4)} {withdrawAsset.symbol}</p>
                 <label style={labelStyle}>Withdrawal Address</label>
-                <input type="text" value={withdrawAddress} onChange={(e) => setWithdrawAddress(e.target.value)} placeholder="Enter wallet address" style={{ ...inputStyle, fontFamily: "monospace", marginBottom: 20 }} />
+                <input type="text" value={withdrawAddress} onChange={(e) => setWithdrawAddress(e.target.value)} placeholder="Enter wallet address" style={{ ...inputStyle, fontFamily: "monospace", marginBottom: 16 }} />
                 <label style={labelStyle}>Withdraw PIN</label>
-                <div style={{ position: "relative", marginBottom: 24 }}>
+                <div style={{ position: "relative", marginBottom: 20 }}>
                   <Key size={16} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }} />
                   <input type="password" value={withdrawPin} onChange={(e) => setWithdrawPin(e.target.value)} placeholder="Enter your 4-digit PIN" maxLength={6} style={{ ...inputStyle, paddingLeft: 40, letterSpacing: "0.15em" }} />
                 </div>
@@ -293,7 +323,7 @@ export default function WalletPage() {
                     <span style={{ color: "#ffffff", fontWeight: 600 }}>~{(parseFloat(withdrawAmount) - 1).toFixed(2)} USD</span>
                   </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12, color: "#9ca3af", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12, color: "#9ca3af", marginBottom: 16 }}>
                   <Warning size={14} style={{ marginTop: 2, flexShrink: 0, color: "#eab308" }} />
                   <p style={{ margin: 0 }}>Double-check the withdrawal address. Transactions cannot be reversed once confirmed on the blockchain.</p>
                 </div>

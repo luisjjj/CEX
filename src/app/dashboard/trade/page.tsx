@@ -38,11 +38,17 @@ export default function TradePage() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <style>{`
+        .trade-leverage-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        @media (max-width: 480px) {
+          .trade-leverage-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+      `}</style>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: "#ffffff", margin: 0 }}>Trade</h1>
 
         {/* Pair selector */}
-        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 24 }}>
+        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 20 }}>
           <label style={{ display: "block", fontSize: 14, color: "#d1d5dc", marginBottom: 8, fontWeight: 500 }}>Trading Pair</label>
           <select
             value={pair}
@@ -56,8 +62,8 @@ export default function TradePage() {
         </div>
 
         {/* Buy/Sell toggle */}
-        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 24 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 24 }}>
+        <div style={{ backgroundColor: "#111620", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", padding: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
             <button
               onClick={() => setSide("buy")}
               style={{
@@ -93,7 +99,7 @@ export default function TradePage() {
           </div>
 
           {/* Order type */}
-          <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+          <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
             {["market", "limit", "stop"].map((t) => (
               <button
                 key={t}
@@ -142,13 +148,12 @@ export default function TradePage() {
 
             <div>
               <label style={{ display: "block", fontSize: 14, color: "#d1d5dc", marginBottom: 6, fontWeight: 500 }}>Leverage</label>
-              <div style={{ display: "flex", gap: 8 }}>
+              <div className="trade-leverage-grid">
                 {["1", "5", "10", "25", "50", "100"].map((l) => (
                   <button
                     key={l}
                     onClick={() => setLeverage(l)}
                     style={{
-                      flex: 1,
                       padding: "8px 0",
                       borderRadius: 8,
                       fontSize: 14,

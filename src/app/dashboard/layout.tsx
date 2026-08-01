@@ -84,7 +84,7 @@ export default function DashboardLayout({
     );
   }
 
-  const navContent = (onNavClick?: () => void) => (
+  const sidebarNavContent = (onNavClick?: () => void) => (
     <>
       <nav style={{ flex: 1, padding: "16px 10px" }}>
         {navItems.map((item) => {
@@ -141,9 +141,9 @@ export default function DashboardLayout({
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#0a0d11", display: "flex" }}>
-      {/* Sidebar - Desktop */}
+      {/* Sidebar - Desktop only */}
       <aside
-        className="hidden lg:flex"
+        className="dash-sidebar-desktop"
         style={{
           flexDirection: "column",
           width: 220,
@@ -164,15 +164,15 @@ export default function DashboardLayout({
             borderBottom: `1px solid ${SIDEBAR_BORDER}`,
           }}
         >
-          <img src="/images/logo.svg" alt="Logo" className="h-8 w-auto" style={{ flexShrink: 0 }} />
+          <img src="/images/logo.svg" alt="Logo" style={{ height: 32, width: "auto", flexShrink: 0 }} />
           <span style={{ color: "#ffffff", fontSize: 14, fontWeight: 700 }}>cextradevip</span>
         </div>
-        {navContent()}
+        {sidebarNavContent()}
       </aside>
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div className="lg:hidden" style={{ position: "fixed", inset: 0, zIndex: 50 }}>
+        <div className="dash-sidebar-mobile-overlay" style={{ position: "fixed", inset: 0, zIndex: 50 }}>
           <div
             style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.6)" }}
             onClick={() => setSidebarOpen(false)}
@@ -201,20 +201,20 @@ export default function DashboardLayout({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <img src="/images/logo.svg" alt="Logo" className="h-8 w-auto" />
+                <img src="/images/logo.svg" alt="Logo" style={{ height: 32, width: "auto" }} />
                 <span style={{ color: "#ffffff", fontSize: 14, fontWeight: 700 }}>cextradevip</span>
               </div>
-              <button onClick={() => setSidebarOpen(false)} style={{ color: "#9ca3af" }}>
+              <button onClick={() => setSidebarOpen(false)} style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
                 <X size={20} />
               </button>
             </div>
-            {navContent(() => setSidebarOpen(false))}
+            {sidebarNavContent(() => setSidebarOpen(false))}
           </aside>
         </div>
       )}
 
-      {/* Main content */}
-      <div style={{ flex: 1, marginLeft: 220, minHeight: "100vh", display: "flex", flexDirection: "column" }} className="lg:ml-[220px]">
+      {/* Main content area */}
+      <div className="dash-main-content" style={{ flex: 1, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         {/* Top bar */}
         <header
           style={{
@@ -225,27 +225,27 @@ export default function DashboardLayout({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "0 20px",
+            padding: "0 16px",
             position: "sticky",
             top: 0,
             zIndex: 20,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden"
-              style={{ color: "#e5e7eb" }}
+              className="dash-hamburger"
+              style={{ color: "#e5e7eb", background: "none", border: "none", cursor: "pointer", padding: 4 }}
             >
               <List size={20} />
             </button>
             <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#e5e7eb" }}>
               <Headphones size={15} />
-              <span className="hidden sm:inline">Support 24/7</span>
+              <span className="dash-support-text">Support 24/7</span>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button style={{ color: "#e5e7eb", transition: "color 0.2s" }}>
+            <button style={{ color: "#e5e7eb", transition: "color 0.2s", background: "none", border: "none", cursor: "pointer" }}>
               <Gear size={18} />
             </button>
             <div
@@ -268,10 +268,75 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main style={{ flex: 1, padding: 20 }} className="lg:p-6">{children}</main>
+        <main style={{ flex: 1, padding: 16 }} className="dash-main-padding">{children}</main>
       </div>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      {/* Bottom Navigation - Mobile only */}
+      <nav className="dash-bottom-nav" style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 64,
+        backgroundColor: SIDEBAR_BG,
+        borderTop: `1px solid ${SIDEBAR_BORDER}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        zIndex: 40,
+        paddingBottom: "env(safe-area-inset-bottom)",
+      }}>
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+                padding: "6px 12px",
+                borderRadius: 8,
+                color: isActive ? GOLD : "#9ca3af",
+                textDecoration: "none",
+                fontSize: 10,
+                fontWeight: isActive ? 600 : 400,
+                transition: "color 0.2s",
+                minWidth: 56,
+              }}
+            >
+              <Icon size={20} weight={isActive ? "fill" : "regular"} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Desktop: show sidebar, hide bottom nav & hamburger */
+        .dash-sidebar-desktop { display: flex; }
+        .dash-bottom-nav { display: none !important; }
+        .dash-hamburger { display: none !important; }
+        .dash-support-text { display: inline; }
+        .dash-main-content { margin-left: 220px; }
+        .dash-main-padding { padding: 24px; }
+
+        /* Mobile: hide sidebar, show bottom nav & hamburger */
+        @media (max-width: 1023px) {
+          .dash-sidebar-desktop { display: none !important; }
+          .dash-bottom-nav { display: flex !important; }
+          .dash-hamburger { display: block !important; }
+          .dash-support-text { display: none; }
+          .dash-main-content { margin-left: 0 !important; padding-bottom: 72px !important; }
+          .dash-main-padding { padding: 16px !important; }
+          .dash-sidebar-mobile-overlay { display: block; }
+        }
+      `}</style>
     </div>
   );
 }
