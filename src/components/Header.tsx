@@ -224,12 +224,18 @@ export default function Header() {
   };
 
   return (
+    <>
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 border-b border-gray-100 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-          : "bg-white"
+          ? "border-white/10 shadow-[0_2px_20px_rgba(0,0,0,0.15)]"
+          : "border-transparent"
       }`}
+      style={{
+        backgroundColor: isScrolled ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0.85)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+      }}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-12">
         <div className="relative flex items-center justify-between h-[88px] lg:h-[100px]">
@@ -403,5 +409,7 @@ export default function Header() {
         </div>
       )}
     </header>
+    <div className="h-[88px] lg:h-[100px]" />
+    </>
   );
 }
