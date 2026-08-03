@@ -214,21 +214,22 @@ export default function DashboardLayout({
       )}
 
       {/* Main content area */}
-      <div className="dash-main-content" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        {/* Top bar */}
+      <div className="dash-main-content" style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+        {/* Top bar - fixed at top, never scrolls */}
         <header
           style={{
             height: 56,
-            backgroundColor: "rgba(17,22,32,0.8)",
-            backdropFilter: "blur(12px)",
-            borderBottom: `1px solid ${SIDEBAR_BORDER}`,
+            minHeight: 56,
+            backgroundColor: "rgba(10, 13, 17, 0.72)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             padding: "0 16px",
-            position: "sticky",
-            top: 0,
             zIndex: 20,
+            boxShadow: "0 1px 12px rgba(0,0,0,0.3)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -267,8 +268,8 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="dash-main-padding" style={{ overflowX: "hidden" }}>{children}</main>
+        {/* Page content - scrollable */}
+        <main className="dash-main-padding" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>{children}</main>
       </div>
 
       <style>{`
